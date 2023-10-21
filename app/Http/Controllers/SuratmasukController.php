@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\SuratmasukImport;
 use App\Models\Suratmasuk;
 use Illuminate\Http\Request;
-use App\Imports\SuratmasukImport;
 use Maatwebsite\Excel\Facades\Excel;
 
 class SuratmasukController extends Controller
@@ -15,7 +15,7 @@ class SuratmasukController extends Controller
     public function index()
     {
         $query = Suratmasuk::all();
-        return view('suratmasuk.index',compact('query'));
+        return view('suratmasuk.index', compact('query'));
     }
 
     /**
@@ -31,41 +31,41 @@ class SuratmasukController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'tglsurat'=>'required',
-            'tglmasuk'=>'required',
-            'nosurat'=>'required',
-            'pengirim'=>'required',
-            'isi'=>'required',
-            'file'=>'required|mimes:pdf|max:10000'
-        ],
-        [
-            'tglsurat.required'=>'Kolom Tanggal Surat tidak boleh kosong',
-            'tglmasuk.required'=>'Kolom Tanggal Masuk tidak boleh kosong',
-            'nosurat.required'=>'Kolom No. Surat tidak boleh kosong',
-            'pengirim.required'=>'Kolom Pengirim tidak boleh kosong',
-            'isi.required'=>'Kolom Isi Ringkas tidak boleh kosong',
-            'file.required'=>'Silahkan pilih file surat',
-            'file.mimes'=>'Tipe File harus PDF',
-            'file.max'=>'Ukuran file tidak boleh dari 10 MB',
-        ]);
-
+        $request->validate(
+            [
+                'tglsurat' => 'required',
+                'tglmasuk' => 'required',
+                'nosurat' => 'required',
+                'pengirim' => 'required',
+                'isi' => 'required',
+                'file' => 'required|mimes:pdf|max:10000',
+            ],
+            [
+                'tglsurat.required' => 'Kolom Tanggal Surat tidak boleh kosong',
+                'tglmasuk.required' => 'Kolom Tanggal Masuk tidak boleh kosong',
+                'nosurat.required' => 'Kolom No. Surat tidak boleh kosong',
+                'pengirim.required' => 'Kolom Pengirim tidak boleh kosong',
+                'isi.required' => 'Kolom Isi Ringkas tidak boleh kosong',
+                'file.required' => 'Silahkan pilih file surat',
+                'file.mimes' => 'Tipe File harus PDF',
+                'file.max' => 'Ukuran file tidak boleh dari 10 MB',
+            ],
+        );
         $filesurat = $request->file('file');
-        $new_name = 'SRM'.date('Ymd').'.'.$filesurat->extension();
-        $filesurat->move('./suratmasukfile/'.$new_name);
+        $new_name = 'SRM' . date('Ymd') . '.' . $filesurat->extension();
+        $filesurat->move('./suratmasukfile/' . $new_name);
         $simpan = Suratmasuk::create([
-            'tgl_surat'=>$request->tglsurat,
-            'tgl_masuk'=>$request->tglmasuk,
-            'no_surat'=>$request->nosurat,
-            'pengirim'=>$request->pengirim,
-            'ringkasan'=>$request->isi,
-            'file_surat'=>$new_name,
+            'tgl_surat' => $request->tglsurat,
+            'tgl_masuk' => $request->tglmasuk,
+            'no_surat' => $request->nosurat,
+            'pengirim' => $request->pengirim,
+            'ringkasan' => $request->isi,
+            'file_surat' => $new_name,
         ]);
-
         $simpan->save();
         return redirect()
-                ->route('suratmasuks.index')
-                ->with('success','Data Surat Masuk sudah berhasil disimpan');
+            ->route('suratmasuks.index')
+            ->with('success', 'Data Surat Masuk sudah berhasil disimpan');
     }
 
     /**
@@ -73,7 +73,7 @@ class SuratmasukController extends Controller
      */
     public function show(Suratmasuk $suratmasuk)
     {
-        return view('suratmasuk.show',compact('suratmasuk'));
+        return view('suratmasuk.detail', compact('suratmasuk'));
     }
 
     /**
@@ -81,8 +81,7 @@ class SuratmasukController extends Controller
      */
     public function edit(Suratmasuk $suratmasuk)
     {
-
-        return view('suratmasuk.edit',compact('suratmasuk'));
+        return view('suratmasuk.edit', compact('suratmasuk'));
     }
 
     /**
@@ -90,40 +89,43 @@ class SuratmasukController extends Controller
      */
     public function update(Request $request, Suratmasuk $suratmasuk)
     {
-        $request->validate([
-            'tglsurat'=>'required',
-            'tglmasuk'=>'required',
-            'nosurat'=>'required',
-            'pengirim'=>'required',
-            'isi'=>'required',
-            'file'=>'mimes:pdf|max:10000'
-        ],
-        [
-            'tglsurat.required'=>'Kolom Tanggal Surat tidak boleh kosong',
-            'tglmasuk.required'=>'Kolom Tanggal Masuk tidak boleh kosong',
-            'nosurat.required'=>'Kolom No. Surat tidak boleh kosong',
-            'pengirim.required'=>'Kolom Pengirim tidak boleh kosong',
-            'isi.required'=>'Kolom Isi Ringkas tidak boleh kosong',
-            'file.required'=>'Silahkan pilih file surat',
-            'file.mimes'=>'Tipe File harus PDF',
-            'file.max'=>'Ukuran file tidak boleh dari 10 MB',
-        ]);
+        $request->validate(
+            [
+                'tglsurat' => 'required',
+                'tglmasuk' => 'required',
+                'nosurat' => 'required',
+                'pengirim' => 'required',
+                'isi' => 'required',
+                'file' => 'mimes:pdf|max:10000',
+            ],
+            [
+                'tglsurat.required' => 'Kolom Tanggal Surat tidak boleh kosong',
+                'tglmasuk.required' => 'Kolom Tanggal Masuk tidak boleh kosong',
+                'nosurat.required' => 'Kolom No. Surat tidak boleh kosong',
+                'pengirim.required' => 'Kolom Pengirim tidak boleh kosong',
+                'isi.required' => 'Kolom Isi Ringkas tidak boleh kosong',
+                'file.required' => 'Silahkan pilih file surat',
+                'file.mimes' => 'Tipe File harus PDF',
+                'file.max' => 'Ukuran file tidak boleh dari 10 MB',
+            ],
+        );
         $filesurat = $request->file('file');
         $suratmasuk->no_surat = $request->nosurat;
         $suratmasuk->tgl_surat = $request->tglsurat;
         $suratmasuk->tgl_masuk = $request->tglmasuk;
         $suratmasuk->pengirim = $request->pengirim;
         $suratmasuk->ringkasan = $request->isi;
-        if($filesurat != "") {
-            $new_name = rand().'.'.$filesurat->extension();
-            $filesurat->move('./suratmasukfile',$new_name);
+        if ($filesurat != '') {
+            $new_name = rand() . '.' . $filesurat->extension();
+            $filesurat->move('./suratmasukfile', $new_name);
             $suratmasuk->file_surat = $new_name;
         }
         $suratmasuk->save();
         return redirect()
-                ->route('suratmasuks.index')
-                ->with('success','Ubah Surat Masuk sudah berhasil disimpan');
+            ->route('suratmasuks.index')
+            ->with('success', 'Ubah Surat Masuk sudah berhasil disimpan');
     }
+
     /**
      * Remove the specified resource from storage.
      */
@@ -132,7 +134,7 @@ class SuratmasukController extends Controller
         $suratmasuk->delete();
         return redirect()
             ->route('suratmasuks.index')
-            ->with('success','Data Surat Masuk sudah berhasil dihapus');
+            ->with('success', 'Data Surat Masuk sudah berhasil dihapus');
     }
 
     public function import()
@@ -143,20 +145,18 @@ class SuratmasukController extends Controller
     public function importproses(Request $request)
     {
         $this->validate($request, [
-			'file' => 'required|mimes:csv,xls,xlsx',
-		]);
-
-		Excel::import(new SuratmasukImport, $request->file('file'));
+            'file' => 'required|mimes:csv,xls,xlsx',
+        ]);
+        Excel::import(new SuratmasukImport(), $request->file('file'));
         return redirect()
             ->route('suratmasuks.index')
-            ->with('success','Import data berhasil');
+            ->with('success', 'Import data berhasil');
     }
-
     public function exportpdf()
     {
-    	$query = Suratmasuk::all();
-    	$pdf = app()->make('dompdf.wrapper');
-        $pdf->loadview('suratmasuk.suratmasuk_pdf',['query'=>$query]);
-    	return $pdf->download('laporan-suratmasuk.pdf');
+        $query = Suratmasuk::all();
+        $pdf = app()->make('dompdf.wrapper');
+        $pdf->loadView('suratmasuk.suratmasuk_pdf', ['query' => $query]);
+        return $pdf->download('laporan-suratmasuk.pdf');
     }
 }

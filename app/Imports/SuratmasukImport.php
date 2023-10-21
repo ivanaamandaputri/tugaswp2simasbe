@@ -6,6 +6,7 @@ use App\Models\Suratmasuk;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
+
 class SuratmasukImport implements WithHeadingRow,ToModel
 {
     /**
